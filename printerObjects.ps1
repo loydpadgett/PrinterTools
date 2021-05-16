@@ -16,3 +16,4 @@ class Snapshot {
     $this.Action = $a
     $this.Flag = $f
     }
+}
