@@ -2,13 +2,17 @@ class Snapshot {
     #snapshot properties
     [string]$Server;
     [string]$Printer;
-    [int]$action
-    [string]$flag
+    [int]$Action
+    [string]$Flag
     #use class for variable validation and error control 
     Snapshot(
     [string]$s,
     [string]$p,
+    [int]$a,
+    [string]$f
     ){
     $this.Server = $s
-    $this.Vm = $v
+    $this.Printer = $p
+    $this.Action = $a
+    $this.Flag = $f
     }
