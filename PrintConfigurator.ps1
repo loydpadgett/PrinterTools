@@ -4,11 +4,11 @@
         or print installed printers
         based on input from user.
     .Description
-        Uses Add-Printer and WSD protocol to add from print01.ua.lan 
+        Uses Add-Printer using WSD protocol to intranet print server.
         Author: Loyd Padgett
         Date:   August 31st, 2020
     .Example
-        .\printConfigurator.ps1 -printer <printerName> -action display -flag all, install,
+        .\printConfigurator.ps1 -printer <printerName> -action display -flag <install> <list> <delete>
 #>
 param(
         [string]$SERVER,       
