@@ -11,12 +11,12 @@ class Printer {
         $this.Printer = $p
     }
 }
-class Action {
+class UserAction {
     #action properties
     #use class for variable validation to determine what needs to be done
     [int]$Exec
     [string]$Flag
-    Action(
+    UserAction(
         [int]$f = 0..2, 
         [string]$e
     ){

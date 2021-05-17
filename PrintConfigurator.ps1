@@ -13,15 +13,17 @@
 param(
         [string]$SERVER,       
         $printer = [string]'0',
-        $action = '0',
+        [string] $uAct.Exec = 'list',
         $flag = ''
 )
 . "D:\C:\Users\lpadgett\Documents\git_lp\Powershell\PrinterTools-1\printerObjects.ps1"
-$userAction = [UserAction]::new()
+$uAct = [UserAction]::new()
+$uAct.Exec = $uAct.Exec
+#try catch after this for error control  
 function DisplayPrinters{
     $printerlist=Get-Printer
-    if($action="list"){
-        switch($action)
+    if($uAct.Exec="list"){
+        switch($uAct.Exec)
         {
             list
             #default is to search all printers
@@ -87,7 +89,7 @@ function DeletePrinter{
         Write-Output "Please enter a correctly formatted printer."
     }
 }
-switch ($action) {
+switch ($uAct.Exec) {
     install {AddPrinter}
     #printers, drivers, ports
     list {DisplayPrinters}
