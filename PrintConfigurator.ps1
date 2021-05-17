@@ -16,6 +16,8 @@ param(
         $action = '0',
         $flag = ''
 )
+. "D:\C:\Users\lpadgett\Documents\git_lp\Powershell\PrinterTools-1\printerObjects.ps1"
+$userAction = [UserAction]::new()
 function DisplayPrinters{
     $printerlist=Get-Printer
     if($action="list"){

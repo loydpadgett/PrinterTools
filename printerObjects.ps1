@@ -1,14 +1,14 @@
 class Printer {
     #printer properties
-    [string]$Server
-    [string]$Printer
+    [ValidateNotNullOrEmpty()][string]$Server
+    [ValidateNotNullOrEmpty()][string]$Printer
     #use method for variable validation and error control 
     Printer(
     [string]$s,
     [string]$p
-        ){
-    $this.Server = $s
-    $this.Printer = $p
+    ){
+        $this.Server = $s
+        $this.Printer = $p
     }
 }
 class Action {
@@ -17,16 +17,10 @@ class Action {
     [int]$Exec
     [string]$Flag
     Action(
-        [int]$E = 0..2,
-        [string]$F = @('add', 'delete', 'list')
+        [int]$f = 0..2, 
+        [string]$e
     ){
-    if($this.Exec -ge 3)
-    {
-      #this should limit error 
-    } elseif ($this.Exec -le 2)
-    {
-        $this.Exec = $E
-    }
-    $this.Flag = $F
+        $this.Flag = $f
+        $this.Exec = $e
     }
 }
