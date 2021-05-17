@@ -35,8 +35,8 @@ function AddPrinter{
     if ($printer -is [string]){
         #make sure case is capped
         $PrinterFormatted = "$printer".ToUpper()
-        #is printer installed?
         [bool]$printerInstalled = $false
+        #use a loop to verify the printer is either already installed/skip or 
         do {
             if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
                 Write-Output "*******$printer is already installed********" -NoEnumerate
@@ -44,10 +44,13 @@ function AddPrinter{
                 Break
             }
             else{
+                #logic-set $printerInstalled to false and then loop to the above
+                #to check that the printer is installed, rather than making
+                #redundant code.
                 Add-Printer -ConnectionName "\\$SERVER\$PrinterFormatted"
                 Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}
                 Write-Output "$printer has been successfully installed."
-                $printerInstalled = $true
+                $printerInstalled = $false
                 Break
             }
         } until ($printerInstalled = $true)
