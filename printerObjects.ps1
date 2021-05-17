@@ -18,12 +18,12 @@ class Action {
     [string]$Flag
     Action(
         [int]$E = 0..2,
-        [string]$F
+        [string]$F = @('add', 'delete', 'list')
     ){
     if($this.Exec -ge 3)
     {
       #this should limit error 
-    } elsef ($this.Exec -le 2)
+    } elseif ($this.Exec -le 2)
     {
         $this.Exec = $E
     }
