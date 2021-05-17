@@ -14,13 +14,18 @@ class Printer {
 class UserAction {
     #action properties
     #use class for variable validation to determine what needs to be done
-    [int]$Exec
+    #use assoc array to match user selections
+    $Exec = @{'0'='display';'1'='create';'2'='remove'}
     [string]$Flag
     UserAction(
-        [int]$f = 0..2, 
-        [string]$e
+        $e,
+        [string]$f
     ){
-        $this.Flag = $f
-        $this.Exec = $e
+        $this.Flag = $e
+        $this.Exec = $f
+    } 
+    [string]GetExecMethod(){
+        return @($this.Exec.0..2 | Where-Object -eq $this.Flag)
     }
+
 }
