@@ -1,31 +1,34 @@
 class Printer {
     #printer properties
-    [ValidateNotNullOrEmpty()][string]$Server
+    [string]$Server
     [ValidateNotNullOrEmpty()][string]$Printer
+    [string]$ConnType
     #use method for variable validation and error control 
     Printer(
     [string]$s,
-    [string]$p
+    [string]$p,
+    [string]$c 
     ){
         $this.Server = $s
         $this.Printer = $p
+        $this.ConnType = $c 
     }
 }
 class UserAction {
     #action properties
     #use class for variable validation to determine what needs to be done
     #use assoc array to match user selections
-    $Exec = @{'0'='display';'1'='create';'2'='remove'}
+    [string]$Exec
     [string]$Flag
     UserAction(
         $e,
         [string]$f
     ){
-        $this.Flag = $e
-        $this.Exec = $f
+        $this.Exec = $e
+        $this.Flag = $f
     } 
     [string]GetExecMethod(){
-        return @($this.Exec.0..2 | Where-Object -eq $this.Flag)
+        return $this.Flag
     }
 
 }
