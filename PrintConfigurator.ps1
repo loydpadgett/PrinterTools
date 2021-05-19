@@ -13,12 +13,11 @@
 param(
         [string]$SERVER,       
         $printer = [string]'0',
-        [string] $uAct.Exec = 'list',
         $flag = ''
 )
 . "D:\C:\Users\lpadgett\Documents\git_lp\Powershell\PrinterTools-1\printerObjects.ps1"
 $uAct = [UserAction]::new()
-$uAct.Exec = $uAct.Exec
+$uAct.Exec = $uAct.Exec()
 #try catch after this for error control  
 function DisplayPrinters{
     $printerlist=Get-Printer
