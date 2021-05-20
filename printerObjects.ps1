@@ -17,10 +17,10 @@ class UserAction {
     [int]$Exec
     [string]$Flag
     UserAction(
-        [int]$f = 0..2, 
-        [string]$e
+        [int]$eXEC = 0..2, 
+        [string]$fLAG
     ){
-        $this.Flag = $f
-        $this.Exec = $e
+        $this.Flag = $eXEC
+        $this.Exec = $fLAG
     }
 }
