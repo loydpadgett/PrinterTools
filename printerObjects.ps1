@@ -14,13 +14,10 @@ class Printer {
 class UserAction {
     #action properties
     #use class for variable validation to determine what needs to be done
-    [int]$Exec
-    [string]$Flag
+    [ValidateNotNullOrEmpty()][string]$Flag
+    
     UserAction(
-        [int]$eXEC = 0..2, 
-        [string]$fLAG
+    [string]$fLAG
     ){
-        $this.Flag = $eXEC
-        $this.Exec = $fLAG
     }
 }

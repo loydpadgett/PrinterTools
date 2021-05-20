@@ -13,17 +13,17 @@
 param(
         [string]$SERVER,       
         $printer = [string]'0',
-        [string] 
-        $flag = ''
+        [string]$flag = 'list'
 )
-. printerObjects.ps1
-$uAct = [UserAction]::new()
-$uAct.Exec = $uAct.Exec
+. .\printerObjects.ps1
+#$NewSnap = [Snapshot]::new($server,$vm,$vmFolder)
+$uAct = [UserAction]::new($flag)
+#$uAct.Flag = $uAct.Exec
 #try catch after this for error control  
 function DisplayPrinters{
     $printerlist=Get-Printer
-    if($uAct.Exec="list"){
-        switch($uAct.Exec)
+    if($uAct.Flag="list"){
+        switch($uAct.Flag)
         {
             list
             #default is to search all printers
@@ -89,7 +89,7 @@ function DeletePrinter{
         Write-Output "Please enter a correctly formatted printer."
     }
 }
-switch ($uAct.Exec) {
+switch ($uAct.Flag) {
     install {AddPrinter}
     #printers, drivers, ports
     list {DisplayPrinters}
