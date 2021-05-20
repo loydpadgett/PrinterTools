@@ -95,7 +95,8 @@ function DeletePrinter{
         {
             Write-Output "Please enter a correctly formatted printer."
         }   
-    }   
+        }
+    }       
 }
 switch ($uAct.Flag) {
     install {AddPrinter}
