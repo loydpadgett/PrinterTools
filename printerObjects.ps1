@@ -1,19 +1,23 @@
-class Snapshot {
-    #snapshot properties
-    [string]$Server;
-    [string]$Printer;
-    [int]$Action
-    [string]$Flag
-    #use class for variable validation and error control 
-    Snapshot(
+class Printer {
+    #printer properties
+    [ValidateNotNullOrEmpty()][string]$Server
+    [ValidateNotNullOrEmpty()][string]$Printer
+    #use method for variable validation and error control 
+    Printer(
     [string]$s,
-    [string]$p,
-    [int]$a,
-    [string]$f
+    [string]$p
     ){
-    $this.Server = $s
-    $this.Printer = $p
-    $this.Action = $a
-    $this.Flag = $f
+        $this.Server = $s
+        $this.Printer = $p
+    }
+}
+class UserAction {
+    #action properties
+    #use class for variable validation to determine what needs to be done
+    [ValidateNotNullOrEmpty()][string]$Flag
+    
+    UserAction(
+    [string]$fLAG
+    ){
     }
 }
