@@ -22,7 +22,6 @@ $uAct = [UserAction]::new($flag)
 #try catch after this for error control  
 function DisplayPrinters{
     $printerlist=Get-Printer
-    if($uAct.Flag="list"){
         switch($uAct.Flag)
         {
             list
@@ -32,65 +31,71 @@ function DisplayPrinters{
                 Select-Object -Property Name, ComputerName, DriverName
             }    
         }
-    }
+    
 }
     #perform specific action when 'display' keyword is used
 function AddPrinter{
-    if ($printer -is [string]){
-        #make sure case is capped
-        $PrinterFormatted = "$printer".ToUpper()
-        [bool]$printerInstalled = $false
-        #use a loop to verify the printer is either already installed/skip or 
-        do {
-            if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
-                Write-Output "*******$printer is already installed********" -NoEnumerate
-                $printerInstalled = $true
-                Break
-            }
-            else{
-                #logic-set $printerInstalled to false and then loop to the above
-                #to check that the printer is installed, rather than making
-                #redundant code.
-                Add-Printer -ConnectionName "\\$SERVER\$PrinterFormatted"
-                Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}
-                Write-Output "$printer has been successfully installed."
-                $printerInstalled = $false
-                Break
-            }
-        } until ($printerInstalled = $true)
-        
-    } 
-    else {
-        Write-Output "Please enter a correctly formatted printer."
+    switch ($uAct.Flag) {
+        add {     
+             if ($printer -is [string]){
+            #make sure case is capped
+            $PrinterFormatted = "$printer".ToUpper()
+            [bool]$printerInstalled = $false
+            #use a loop to verify the printer is either already installed/skip or 
+            do {
+                if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
+                    Write-Output "*******$printer is already installed********" -NoEnumerate
+                    $printerInstalled = $true
+                    Break
+                }
+                else{
+                    #logic-set $printerInstalled to false and then loop to the above
+                    #to check that the printer is installed, rather than making
+                    #redundant code.
+                    Add-Printer -ConnectionName "\\$SERVER\$PrinterFormatted"
+                    Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}
+                    Write-Output "$printer has been successfully installed."
+                    $printerInstalled = $false
+                    Break
+                }
+            } until ($printerInstalled = $true)
+            
+        } 
+        else {
+            Write-Output "Please enter a correctly formatted printer."
+        }
     }
-}
-function AddServerPrinter{
-    
+        Default {}
+    }
 }
 function DeletePrinter{
-    if ($printer -is [string]){
-        #make sure case is capped
-        $PrinterFormatted = "$printer".ToUpper()
-        [bool]$printerInstalled = $true
-        #printer should be installed by default
-        do {
-            if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
-                Remove-Printer -Name "\\$SERVER\$PrinterFormatted"
-                Write-Output "\\$SERVER\$printer has been successfully Removed."
-                $printerInstalled = $false
-                Break
-            }
-            else{
-                Write-Output "*******$printer is not installed*******"
-                $printerInstalled = $false
-                Break
-            }
-        } until ($printerInstalled = $false)
-        
-    } 
-    else {
-        Write-Output "Please enter a correctly formatted printer."
-    }
+    switch ($uAct.Flag) {
+        remove {
+            if ($printer -is [string]){
+            #make sure case is capped
+                $PrinterFormatted = "$printer".ToUpper()
+            [bool]$printerInstalled = $true
+            #printer should be installed by default
+            do {
+                if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
+                    Remove-Printer -Name "\\$SERVER\$PrinterFormatted"
+                    Write-Output "\\$SERVER\$printer has been successfully Removed."
+                    $printerInstalled = $false
+                    Break
+                }
+                else{
+                    Write-Output "*******$printer is not installed*******"
+                    $printerInstalled = $false
+                    Break
+                }
+                      
+            } until ($printerInstalled = $false)
+        }     
+        Default
+        {
+            Write-Output "Please enter a correctly formatted printer."
+        }   
+    }   
 }
 switch ($uAct.Flag) {
     install {AddPrinter}
