@@ -34,7 +34,7 @@ function AddPrinter{
     #use a loop to verify the printer is either already installed/skip or 
     do {
         if(Get-Printer | Where-Object {$_.Name -ilike "*$uPrinter.printer*"}){
-            Write-Output "*******$uPrinter.printer is already installed********" -NoEnumerate
+            Write-Output "*******$uPrinter.printer has been successfully installed*******" -NoEnumerate
             $printerInstalled = $true
             Break
         }
@@ -44,7 +44,6 @@ function AddPrinter{
             #redundant code.
             Add-Printer -ConnectionName "\\$SERVER\$PrinterFormatted"
             Get-Printer | Where-Object {$_.Name -ilike "*$uPrinter.printer*"}
-            Write-Output "$uPrinter.printer has been successfully installed."
             $printerInstalled = $false
             Continue 
         }
