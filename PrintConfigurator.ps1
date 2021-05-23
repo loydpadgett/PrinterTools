@@ -3,8 +3,10 @@
         Add whatever printer is added per argument 
         or print installed printers
         based on input from user.
+        ***PRINTER MUST EXIST ON REMOTE SERVER***
     .Description
-        Uses Add-Printer using WSD protocol to intranet print server.
+        Installs, Lists, and Deletes printer from remote Windows print server. 
+        TODO: Add print driver list function and a choose protocol for add function
         Author: Loyd Padgett
         Date:   August 31st, 2020
     .Example
@@ -16,9 +18,8 @@ param(
         [string]$flag = 'list'
 )
 . .\printerObjects.ps1
-#$NewSnap = [Snapshot]::new($server,$vm,$vmFolder)
+#create objects and apply attributes
 $uAct = [UserAction]::new($flag)
-#try catch after this for error control  
 $uPrinter = [Printer]::new($Server,$printer)
 function DisplayPrinters{
     $printerlist=Get-Printer
@@ -27,32 +28,27 @@ function DisplayPrinters{
     }
     #perform specific action when 'display' keyword is used
 function AddPrinter{
-    if ($uPrinter.Printer -is [string]){
-        #make sure case is capped
-        $PrinterFormatted = "$uPrinter.printer".ToUpper()
-            [bool]$printerInstalled = $false
-            #use a loop to verify the printer is either already installed/skip or 
-            do {
-                if(Get-Printer | Where-Object {$_.Name -ilike "*$uPrinter.printer*"}){
-                    Write-Output "*******$uPrinter.printer is already installed********" -NoEnumerate
-                    $printerInstalled = $true
-                    Break
-                }
-                else{
-                    #logic-set $printerInstalled to false and then loop to the above
-                    #to check that the printer is installed, rather than making
-                    #redundant code.
-                    Add-Printer -ConnectionName "\\$SERVER\$PrinterFormatted"
-                    Get-Printer | Where-Object {$_.Name -ilike "*$uPrinter.printer*"}
-                    Write-Output "$uPrinter.printer has been successfully installed."
-                    $printerInstalled = $false
-                    Break
-                }
-        } until ($printerInstalled = $true)
-    } 
-    else {
-        Write-Output "Please enter a correctly formatted printer."
-    }
+    #make sure case is capped
+    $PrinterFormatted = "$uPrinter.printer".ToUpper()
+    [bool]$printerInstalled = $false
+    #use a loop to verify the printer is either already installed/skip or 
+    do {
+        if(Get-Printer | Where-Object {$_.Name -ilike "*$uPrinter.printer*"}){
+            Write-Output "*******$uPrinter.printer is already installed********" -NoEnumerate
+            $printerInstalled = $true
+            Break
+        }
+        else{
+            #logic-set $printerInstalled to false and then loop to the above
+            #to check that the printer is installed, rather than making
+            #redundant code.
+            Add-Printer -ConnectionName "\\$SERVER\$PrinterFormatted"
+            Get-Printer | Where-Object {$_.Name -ilike "*$uPrinter.printer*"}
+            Write-Output "$uPrinter.printer has been successfully installed."
+            $printerInstalled = $false
+            Continue 
+        }
+    } until ($printerInstalled = $true)
 }
 function DeletePrinter{
     if ($printer -is [string]){
