@@ -20,7 +20,8 @@ param(
 . .\printerObjects.ps1
 #create objects and apply attributes
 $uAct = [UserAction]::new($flag)
-$uPrinter = [Printer]::new($Server,$printer)
+$uPrinter = [Printer]::new($Server,$printer)    
+$PrinterFormatted = "$uPrinter.printer".ToUpper()
 function DisplayPrinters{
     $printerlist=Get-Printer
     $printerlist | Where-Object {$_.Type -notlike "Local"} | `
@@ -29,7 +30,6 @@ function DisplayPrinters{
     #perform specific action when 'display' keyword is used
 function AddPrinter{
     #make sure case is capped
-    $PrinterFormatted = "$uPrinter.printer".ToUpper()
     [bool]$printerInstalled = $false
     #use a loop to verify the printer is either already installed/skip or 
     do {
@@ -48,21 +48,20 @@ function AddPrinter{
 }
 function DeletePrinter{
     #make sure case is capped
-    $PrinterFormatted = "$uPrinter.printer".ToUpper()
-    [bool]$printerInstalled = $true
+    [bool]$printerUninstalled = $false
     #printer should be installed by default
     do {
         if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
             Remove-Printer -Name "\\$SERVER\$PrinterFormatted"
             Write-Output "\\$SERVER\$printer has been successfully Removed."
-            $printerInstalled = $false
+            $printerUninstalled = $true
             Break
         } 
         else{
             Write-Output "*******$printer is not installed*******"
-            $printerInstalled = $false
+            $printerUninstalled = $false
         }
-    } until ($printerInstalled = $false)
+    } until ($printerUninstalled = $true)
 }
 switch ($uAct.Flag) {
     install {AddPrinter}
