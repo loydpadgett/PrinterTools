@@ -29,7 +29,8 @@ function DisplayPrinters{
 }
     #perform specific action when 'display' keyword is used
 function AddPrinter{
-    #make sure case is capped
+if ($uAct.Flag -eq 'delete') 
+{        
     [bool]$printerInstalled = $false
     #use a loop to verify the printer is either already installed/skip or 
     do {
@@ -45,6 +46,7 @@ function AddPrinter{
             Continue 
         }
     } until ($printerInstalled = $true)
+}
 }
 function DeletePrinter{
     #make sure case is capped
