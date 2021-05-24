@@ -42,8 +42,7 @@ function AddPrinter{
             #logic-set $printerInstalled to false and then loop to the above
             #to check that the printer is installed, rather than making
             #redundant code.
-            Add-Printer -ConnectionName "\\$SERVER\$PrinterFormatted"
-            Get-Printer | Where-Object {$_.Name -ilike "*$uPrinter.printer*"}
+            Add-Printer -ConnectionName "\\$SERVER\$PrinterFormatted" 
             $printerInstalled = $false
             Continue 
         }
