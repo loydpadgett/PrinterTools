@@ -10,7 +10,7 @@
         Author: Loyd Padgett
         Date:   August 31st, 2020
     .Example
-        .\printConfigurator.ps1 -printer <printerName> -action display -flag <install> <list> <delete>
+        .\printConfigurator.ps1 -SERVER <serverName> -printer <printerName> -action display -flag <install> <list> <delete>
 #>
 param(
         [string]$SERVER,       
