@@ -46,6 +46,24 @@ function AddPrinter{
         }
     } until ($printerInstalled = $true)
 }
+function TestPrinter{
+    #make sure case is capped
+    [bool]$printerInstalled = $false
+    #use a loop to verify the printer is either already installed/skip or 
+    do {
+        if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
+            $PrintMessage = "MESSAGE FROM OTIS: ****\\$SERVER\$PrinterFormatted has been installed, this is a test print to verify connectivity"
+            $PrintMessage | Out-Printer -Name "\\$Server\$PrinterFormatted"
+        Break
+        }
+        else
+        {
+            
+            $printerInstalled = $false
+            Continue 
+        }
+    } until ($printerInstalled = $true)
+}
 function DeletePrinter{
     #make sure case is capped
     [bool]$printerUninstalled = $false
@@ -67,5 +85,6 @@ switch ($uAct.Flag) {
     list { DisplayPrinters }
     #printers, drivers, ports, Type connection, ip?
     delete { DeletePrinter }
+    test { TestPrinter }
     Default { DisplayPrinters }
 }
