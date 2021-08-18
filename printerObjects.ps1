@@ -17,7 +17,8 @@ class UserAction {
     [ValidateNotNullOrEmpty()][string]$Flag
     
     UserAction(
-    [string]$fLAG
+    [string]$f
     ){
+        $this.Flag = $f
     }
 }

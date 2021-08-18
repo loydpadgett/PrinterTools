@@ -14,14 +14,14 @@
 #>
 param(
         [string]$SERVER,       
-        $printer = [string]'0',
+        [string]$printer = '0',
         [string]$flag = 'list'
 )
 . .\printerObjects.ps1
 #create objects and apply attributes
 $uAct = [UserAction]::new($flag)
 $uPrinter = [Printer]::new($Server,$printer)    
-$PrinterFormatted = "$uPrinter.printer".ToUpper()
+$PrinterFormatted = $uPrinter.Printer.ToUpper()
 function DisplayPrinters{
     $printerlist=Get-Printer
     $printerlist | Where-Object {$_.Type -notlike "Local"} | `
@@ -33,14 +33,14 @@ function AddPrinter{
     [bool]$printerInstalled = $false
     #use a loop to verify the printer is either already installed/skip or 
     do {
-        if(Get-Printer | Where-Object {$_.Name -ilike "*$uPrinter.printer*"}){
+        if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
             Write-Output "*******$uPrinter.printer has been successfully installed*******" -NoEnumerate
             $printerInstalled = $true
             Break
         }
         else
         {
-            Add-Printer -ConnectionName "\\$SERVER\$PrinterFormatted" 
+            Add-Printer -ConnectionName \\$SERVER\$PrinterFormatted 
             $printerInstalled = $false
             Continue 
         }
@@ -51,8 +51,8 @@ function DeletePrinter{
     [bool]$printerUninstalled = $false
     #printer should be installed by default
     do {
-        if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
-            Remove-Printer -Name "\\$SERVER\$PrinterFormatted"
+        if(Get-Printer | Where-Object {$_.Name -ilike '*$printer*'}){
+            Remove-Printer -Name '\\$SERVER\$PrinterFormatted'
             Write-Output "\\$SERVER\$printer has been successfully Removed."
             $printerUninstalled = $true
             Break
@@ -64,10 +64,10 @@ function DeletePrinter{
     } until ($printerUninstalled = $true)
 }
 switch ($uAct.Flag) {
-    install {AddPrinter}
+    install { AddPrinter }
     #printers, drivers, ports
-    list {DisplayPrinters}
+    list { DisplayPrinters }
     #printers, drivers, ports, Type connection, ip?
-    delete {DeletePrinter}
-    Default {DisplayPrinters}
+    delete { DeletePrinter }
+    Default { DisplayPrinters }
 }
