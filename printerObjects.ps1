@@ -22,6 +22,6 @@ class UserAction {
     [string]$a
     ){
         $this.Flag = $f
-        $this.Action = $a
+        $this.Action.Where({$_.Action -ilike "network|local"} -eq 0) = $a
     }
 }

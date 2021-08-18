@@ -27,7 +27,7 @@ function DisplayPrinters{
     #this pipeline moves over multiple lines, fyi
        
     function LocalPrinter {
-        $printerlist = Get-Printer | Where-Object {$_.Name -ilike "*$Printer*"}Where-Object {$_.Type -notlike "Local"} | `
+        $printerlist = Get-Printer | Where-Object {$_.Type -notlike "Local"} | `
         Select-Object -Property Name, ComputerName, DriverName
         Write-Output $printerlist
     }
