@@ -32,9 +32,9 @@ function DisplayPrinters{
         Write-Output $printerlist
     }
     function NetworkPrinter {
-        $netprinterlist = Get-Printer -ComputerName "print01.ua.lan" | Where-Object {$_.Name -notlike "*Microsoft*"} | `
+        $printerlist = Get-Printer -ComputerName "$NetworkPrinter" | Where-Object {$_.Name -notlike "*Microsoft*"} | `
         Select-Object -Property Name, ComputerName, DriverName
-        Write-Output $netprinterlist
+        Write-Output $printerlist
     }
    switch ($uAct.Action) {
         local { LocalPrinter }
@@ -97,9 +97,7 @@ function DeletePrinter{
 }
 switch ($uAct.Flag) {
     install { AddPrinter }
-    #printers, drivers, ports
     list { DisplayPrinters }
-    #printers, drivers, ports, Type connection, ip?
     delete { DeletePrinter }
     test { TestPrinter }
     Default { DisplayPrinters }
