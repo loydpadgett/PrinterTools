@@ -10,7 +10,7 @@
         Author: Loyd Padgett
         Date:   August 31st, 2020
     .Example
-        .\printConfigurator.ps1 -printer <printerName> -action display -flag <install> <list> <delete>
+        .\printConfigurator.ps1 -SERVER <serverName> -printer <printerName> -action display -flag <install> <list> <delete>
 #>
 param(
         [string]$SERVER,       
@@ -27,7 +27,7 @@ function DisplayPrinters{
     #this pipeline moves over multiple lines, fyi
        
     function LocalPrinter {
-        $printerlist = Get-Printer | Where-Object {$_.Name -ilike "*$Printer*"}Where-Object {$_.Type -notlike "Local"} | `
+        $printerlist = Get-Printer | Where-Object {$_.Type -notlike "Local"} | `
         Select-Object -Property Name, ComputerName, DriverName
         Write-Output $printerlist
     }
@@ -48,14 +48,14 @@ function AddPrinter{
     [bool]$printerInstalled = $false
     #use a loop to verify the printer is either already installed/skip or 
     do {
-        if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"} -and Where-Object{$_.Name -notlike "Local"}){
+        if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"} | Where-Object{$_.Name -notlike "Local"}){
             Write-Output "*******$uPrinter.printer has been successfully installed*******" -NoEnumerate
             $printerInstalled = $true
             Break
         }
         else
         {
-            Add-Printer -ConnectionName \\$SERVER\$PrinterFormatted 
+            Add-Printer -ConnectionName "\\$SERVER\$PrinterFormatted" 
             $printerInstalled = $false
             Continue 
         }
