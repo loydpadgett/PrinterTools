@@ -32,9 +32,9 @@ function DisplayPrinters{
         Write-Output $printerlist
     }
     function NetworkPrinter {
-        $netprinterlist = Get-Printer -ComputerName "$NetworkPrinter" | Where-Object {$_.Name -notlike "*Microsoft*"} | `
+        $printerlist = Get-Printer -ComputerName "$NetworkPrinter" | Where-Object {$_.Name -notlike "*Microsoft*"} | `
         Select-Object -Property Name, ComputerName, DriverName
-        Write-Output $netprinterlist
+        Write-Output $printerlist
     }
    switch ($uAct.Action) {
         local { LocalPrinter }
