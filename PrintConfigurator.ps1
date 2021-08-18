@@ -14,7 +14,7 @@
 #>
 param(
         [string]$SERVER,       
-        [string]$printer = '0',
+        [string]$printer,
         [string]$flag = 'list'
 )
 . .\printerObjects.ps1
@@ -51,16 +51,14 @@ function DeletePrinter{
     [bool]$printerUninstalled = $false
     #printer should be installed by default
     do {
-        if(Get-Printer | Where-Object {$_.Name -ilike '*$printer*'}){
-            Remove-Printer -Name '\\$SERVER\$PrinterFormatted'
-            Write-Output "\\$SERVER\$printer has been successfully Removed."
+        if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
+            Remove-Printer -Name "\\$SERVER\$PrinterFormatted"
+            Write-Output "********$printer********* has been successfully Removed.
+            
+            
+            "
             $printerUninstalled = $true
-            Break
         } 
-        else{
-            Write-Output "*******$printer is not installed*******"
-            $printerUninstalled = $false
-        }
     } until ($printerUninstalled = $true)
 }
 switch ($uAct.Flag) {
