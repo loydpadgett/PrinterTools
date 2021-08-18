@@ -48,21 +48,22 @@ function AddPrinter{
 }
 function TestPrinter{
     #make sure case is capped
-    [bool]$printerInstalled = $false
+    [bool]$printSent = $false
     #use a loop to verify the printer is either already installed/skip or 
     do {
         if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
             $PrintMessage = "MESSAGE FROM OTIS: ****\\$SERVER\$PrinterFormatted has been installed, this is a test print to verify connectivity"
             $PrintMessage | Out-Printer -Name "\\$Server\$PrinterFormatted"
+            $printSent = $true
         Break
         }
         else
         {
-            
-            $printerInstalled = $false
-            Continue 
+            Write-Output "No printer found by that name!"
+            $printSent = $false
+        Break
         }
-    } until ($printerInstalled = $true)
+    } until ($printSent = $true)
 }
 function DeletePrinter{
     #make sure case is capped
