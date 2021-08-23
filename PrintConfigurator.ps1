@@ -10,7 +10,21 @@
         Author: Loyd Padgett
         Date:   August 31st, 2020
     .Example
-        .\printConfigurator.ps1 -server <serverName> -printer <printerName> -action display -flag <install> <list> <delete>
+    The Printer Configurator can do the following tasks to install printers. 
+
+        List Local Installed Printers
+        .\printConfigurator.ps1 -server <serverName> -flag <list> -NetworkServer <local>
+
+        List Network Installed Printers
+        .\printConfigurator.ps1 -server <serverName> -flag <list> -NetworkServer <network>
+
+        Install Network Printers
+        .\printConfigurator.ps1 -server <serverName> -printer <printerName> -flag <install>
+
+        Delete Local Printers
+        .\printConfigurator.ps1 -server <serverName> -printer <printerName> -flag <delete>
+
+
 #>
 param(
         [string]$server,       
@@ -21,7 +35,7 @@ param(
 )
 . .\printerObjects.ps1
 #create objects and apply attributes
-$uAct = [UserAction]::new($flag,$action)
+$uAct = [UserAction]::new($flag,$NetworkServer)
 $uPrinter = [Printer]::new($Server,$printer)    
 $PrinterFormatted = $uPrinter.Printer.ToUpper()
 function DisplayPrinters{
@@ -33,17 +47,9 @@ function DisplayPrinters{
         Write-Output $printerlist
     }
     function NetworkPrinter {
-        do {
-            
-        } until (condition)
-        $printerlist = Get-Printer -ComputerName "$NetworkServer" | Where-Object {$_.Name -notlike "*Microsoft*"} | `
+        $printerlist = Get-Printer -ComputerName $server | Where-Object {$_.Name -notlike "*Microsoft*"} | `
         Select-Object -Property Name, ComputerName, DriverName
         Write-Output $printerlist
-    }
-    function IsNetworkServer {
-        do {
-            
-        } until (condition)
     }
    switch ($uAct.Action) {
         local { LocalPrinter }
@@ -60,7 +66,7 @@ function AddPrinter{
         if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"} | Where-Object{$_.Name -notlike "Local"}){
             Write-Output "*******$uPrinter.printer has been successfully installed*******" -NoEnumerate
             $printerInstalled = $true
-        }
+        t}
         else
         {
             Add-Printer -ConnectionName "\\$server\$PrinterFormatted" 
