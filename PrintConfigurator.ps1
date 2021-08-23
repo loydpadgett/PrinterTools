@@ -17,7 +17,7 @@ param(
         [string]$printer,
         [string]$flag = 'list',
         [string]$action = 'local',
-        [string]$NetworkServer
+        [string]$NetworkServer = 'false'
 )
 . .\printerObjects.ps1
 #create objects and apply attributes
@@ -33,9 +33,17 @@ function DisplayPrinters{
         Write-Output $printerlist
     }
     function NetworkPrinter {
+        do {
+            
+        } until (condition)
         $printerlist = Get-Printer -ComputerName "$NetworkServer" | Where-Object {$_.Name -notlike "*Microsoft*"} | `
         Select-Object -Property Name, ComputerName, DriverName
         Write-Output $printerlist
+    }
+    function IsNetworkServer {
+        do {
+            
+        } until (condition)
     }
    switch ($uAct.Action) {
         local { LocalPrinter }
