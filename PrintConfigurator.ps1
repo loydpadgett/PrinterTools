@@ -10,13 +10,14 @@
         Author: Loyd Padgett
         Date:   August 31st, 2020
     .Example
-        .\printConfigurator.ps1 -SERVER <serverName> -printer <printerName> -action display -flag <install> <list> <delete>
+        .\printConfigurator.ps1 -server <serverName> -printer <printerName> -action display -flag <install> <list> <delete>
 #>
 param(
-        [string]$SERVER,       
+        [string]$server,       
         [string]$printer,
         [string]$flag = 'list',
-        [string]$action = 'local'
+        [string]$action = 'local',
+        [string]$NetworkServer = 'local'
 )
 . .\printerObjects.ps1
 #create objects and apply attributes
@@ -32,9 +33,17 @@ function DisplayPrinters{
         Write-Output $printerlist
     }
     function NetworkPrinter {
-        $printerlist = Get-Printer -ComputerName "$NetworkPrinter" | Where-Object {$_.Name -notlike "*Microsoft*"} | `
+        do {
+            
+        } until (condition)
+        $printerlist = Get-Printer -ComputerName "$NetworkServer" | Where-Object {$_.Name -notlike "*Microsoft*"} | `
         Select-Object -Property Name, ComputerName, DriverName
         Write-Output $printerlist
+    }
+    function IsNetworkServer {
+        do {
+            
+        } until (condition)
     }
    switch ($uAct.Action) {
         local { LocalPrinter }
@@ -51,11 +60,10 @@ function AddPrinter{
         if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"} | Where-Object{$_.Name -notlike "Local"}){
             Write-Output "*******$uPrinter.printer has been successfully installed*******" -NoEnumerate
             $printerInstalled = $true
-            Break
         }
         else
         {
-            Add-Printer -ConnectionName "\\$SERVER\$PrinterFormatted" 
+            Add-Printer -ConnectionName "\\$server\$PrinterFormatted" 
             $printerInstalled = $false
             Continue 
         }
@@ -67,7 +75,7 @@ function TestPrinter{
     #use a loop to verify the printer is either already installed/skip or 
     do {
         if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
-            $PrintMessage = "MESSAGE FROM OTIS: ****\\$SERVER\$PrinterFormatted has been installed, this is a test print to verify connectivity"
+            $PrintMessage = "MESSAGE FROM OTIS: ****\\$server\$PrinterFormatted has been installed, this is a test print to verify connectivity"
             $PrintMessage | Out-Printer -Name "\\$Server\$PrinterFormatted"
             $printSent = $true
         Break
@@ -86,7 +94,7 @@ function DeletePrinter{
     #printer should be installed by default
     do {
         if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
-            Remove-Printer -Name "\\$SERVER\$PrinterFormatted"
+            Remove-Printer -Name "\\$server\$PrinterFormatted"
             Write-Output "********$printer********* has been successfully Removed.
             
             
