@@ -30,7 +30,7 @@ param(
         [string]$server,       
         [string]$printer,
         [string]$flag = 'list',
-        [string]$action = 'local',
+        #[string]$action = 'local',
         [string]$NetworkServer = 'local'
 )
 . .\printerObjects.ps1
