@@ -16,12 +16,12 @@ param(
         [string]$server = 'local',       
         [string]$printer,
         [string]$action = 'list',
-        [string]$network
+        [string]$conn = 'local'
 )
 . .\printerObjects.ps1
 #create objects and apply attributes
 $uAct = [UserAction]::new($action)
-$uPrinter = [Printer]::new($server,$printer,$network)    
+$uPrinter = [Printer]::new($server,$printer,$conn)    
 $PrinterFormatted = $uPrinter.Printer.ToUpper()
 function DisplayPrinters{
     #this pipeline moves over multiple lines, fyi
@@ -35,7 +35,7 @@ function DisplayPrinters{
         Select-Object -Property Name, ComputerName, DriverName
         Write-Output $printerlist -ErrorAction Stop
     }
-   switch ($uAct.Action) {
+   switch ($uPrinter.Network) {
         local { LocalPrinter }
         network { NetworkPrinter }
         Default { LocalPrinter }
