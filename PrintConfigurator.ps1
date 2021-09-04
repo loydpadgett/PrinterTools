@@ -16,24 +16,24 @@ param(
         [string]$server = 'local',       
         [string]$printer,
         [string]$action = 'list',
-        [string]$network = 'local'
+        [string]$network
 )
 . .\printerObjects.ps1
 #create objects and apply attributes
 $uAct = [UserAction]::new($action)
-$uPrinter = [Printer]::new($server,$printer)    
+$uPrinter = [Printer]::new($server,$printer,$network)    
 $PrinterFormatted = $uPrinter.Printer.ToUpper()
 function DisplayPrinters{
     #this pipeline moves over multiple lines, fyi
     function LocalPrinter {
         $printerlist = Get-Printer | Where-Object {$_.Type -notlike "Local"} | `
         Select-Object -Property Name, ComputerName, DriverName
-        Write-Output $printerlist -ErrorAction
+        Write-Output $printerlist -ErrorAction Stop
     }
     function NetworkPrinter {
-        $printerlist = Get-Printer -ComputerName "$network" | Where-Object {$_.Name -notlike "*Microsoft*"} | `
+        $printerlist = Get-Printer -ComputerName $uPrinter.Server | Where-Object {$_.Name -notlike "*Microsoft*"} | `
         Select-Object -Property Name, ComputerName, DriverName
-        Write-Output $printerlist
+        Write-Output $printerlist -ErrorAction Stop
     }
    switch ($uAct.Action) {
         local { LocalPrinter }
@@ -86,7 +86,7 @@ function DeletePrinter{
     do {
         if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
             Remove-Printer -Name "\\$SERVER\$PrinterFormatted"
-            Write-Output "********$printer********* has been successfully Removed.
+            Write-Output "********$printer********* has been successfully Removed.  
             
             
             "
