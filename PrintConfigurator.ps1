@@ -13,27 +13,25 @@
         .\printConfigurator.ps1 -SERVER <serverName> -printer <printerName> -action display -flag <install> <list> <delete>
 #>
 param(
-        [string]$SERVER,       
+        [string]$server = 'local',       
         [string]$printer,
-        [string]$flag = 'list',
-        [string]$action = 'local',
-        [string]$NetworkServer
+        [string]$action = 'list',
+        [string]$network = 'local'
 )
 . .\printerObjects.ps1
 #create objects and apply attributes
-$uAct = [UserAction]::new($flag,$action)
-$uPrinter = [Printer]::new($Server,$printer)    
+$uAct = [UserAction]::new($action)
+$uPrinter = [Printer]::new($server,$printer)    
 $PrinterFormatted = $uPrinter.Printer.ToUpper()
 function DisplayPrinters{
     #this pipeline moves over multiple lines, fyi
-       
     function LocalPrinter {
         $printerlist = Get-Printer | Where-Object {$_.Type -notlike "Local"} | `
         Select-Object -Property Name, ComputerName, DriverName
-        Write-Output $printerlist
+        Write-Output $printerlist -ErrorAction
     }
     function NetworkPrinter {
-        $printerlist = Get-Printer -ComputerName "$NetworkServer" | Where-Object {$_.Name -notlike "*Microsoft*"} | `
+        $printerlist = Get-Printer -ComputerName "$network" | Where-Object {$_.Name -notlike "*Microsoft*"} | `
         Select-Object -Property Name, ComputerName, DriverName
         Write-Output $printerlist
     }
@@ -96,7 +94,7 @@ function DeletePrinter{
         } 
     } until ($printerUninstalled = $true)
 }
-switch ($uAct.Flag) {
+switch ($uAct.action) {
     install { AddPrinter }
     list { DisplayPrinters }
     delete { DeletePrinter }
