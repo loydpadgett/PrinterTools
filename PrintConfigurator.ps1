@@ -39,8 +39,7 @@ $uAct = [UserAction]::new($flag,$NetworkServer)
 $uPrinter = [Printer]::new($Server,$printer)    
 $PrinterFormatted = $uPrinter.Printer.ToUpper()
 function DisplayPrinters{
-    #this pipeline moves over multiple lines, fyi
-       
+    #what do you want to display? local or network?
     function LocalPrinter {
         $printerlist = Get-Printer | Where-Object {$_.Type -notlike "Local"} | `
         Select-Object -Property Name, ComputerName, DriverName
@@ -57,16 +56,18 @@ function DisplayPrinters{
         Default { LocalPrinter }
     }  
 }
-    #perform specific action when 'display' keyword is used
 function AddPrinter{
     #make sure case is capped
     [bool]$printerInstalled = $false
-    #use a loop to verify the printer is either already installed/skip or 
+    # use a loop to verify the printer is either already installed/skip or 
     do {
+        # verify printer isn't locally installed. 
         if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"} | Where-Object{$_.Name -notlike "Local"}){
+            Write-Output "***************************************************************" -NoEnumerate
             Write-Output "*******$uPrinter.printer has been successfully installed*******" -NoEnumerate
+            Write-Output "***************************************************************" -NoEnumerate
             $printerInstalled = $true
-        t}
+        }
         else
         {
             Add-Printer -ConnectionName "\\$server\$PrinterFormatted" 
