@@ -66,7 +66,8 @@ function TestPrinter{
     #use a loop to verify the printer is either already installed/skip or 
     do {
         if(Get-Printer | Where-Object {$_.Name -ilike "*$printer*"}){
-            $PrintMessage = "MESSAGE FROM OTIS: ****\\$SERVER\$PrinterFormatted has been installed, this is a test print to verify connectivity"
+            $PrintMessage = "MESSAGE FROM OTIS: ****\\$SERVER\$PrinterFormatted has been installed, 
+            this is a test print to verify connectivity"
             $PrintMessage | Out-Printer -Name "\\$Server\$PrinterFormatted"
             $printSent = $true
         Break
