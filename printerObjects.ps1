@@ -1,6 +1,6 @@
 class Printer {
     #printer properties
-    [ValidatePattern('[\w\d].[\w\d]')][string]$Server
+    [ValidatePattern('[\w\d].[\w].[\w]')][string]$Server
     [string]$Printer
     #use method for variable validation and error control 
     Printer(
