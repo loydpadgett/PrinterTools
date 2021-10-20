@@ -13,10 +13,10 @@
     The Printer Configurator can do the following tasks to install printers. 
 
         List Local Installed Printers
-        .\printConfigurator.ps1 -server <serverName> -flag <list> -NetworkServer <local>
+        .\printConfigurator.ps1 -server <serverName> -flag <list> -conn <local>
 
         List Network Installed Printers
-        .\printConfigurator.ps1 -server <serverName> -flag <list> -NetworkServer <network>
+        .\printConfigurator.ps1 -server <serverName> -flag <list> -conn <network>
 
         Install Network Printers
         .\printConfigurator.ps1 -server <serverName> -printer <printerName> -flag <install>
@@ -31,11 +31,11 @@ param(
         [string]$printer,
         [string]$flag = 'list',
         #[string]$action = 'local',
-        [string]$NetworkServer = 'local'
+        [string]$conn = 'local'
 )
 . .\printerObjects.ps1
 #create objects and apply attributes
-$uAct = [UserAction]::new($flag,$NetworkServer)
+$uAct = [UserAction]::new($flag,$conn)
 $uPrinter = [Printer]::new($Server,$printer)    
 $PrinterFormatted = $uPrinter.Printer.ToUpper()
 function DisplayPrinters{
