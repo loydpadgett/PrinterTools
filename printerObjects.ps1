@@ -14,7 +14,7 @@ class Printer {
 class UserAction {
     #action properties
     #use class for variable validation to determine what needs to be done
-    [ValidatePattern('^li[st?]|^inst[a?]|^dele[t?]|^te[s?]')][string]$Flag
+    [ValidatePattern('^list$|^install$|^delete$|^test$')][string]$Flag
     [ValidatePattern('^net[wo?]|^loc[a?]')][string]$Action
     
     UserAction(

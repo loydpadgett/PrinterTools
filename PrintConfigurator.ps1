@@ -50,7 +50,7 @@ function DisplayPrinters{
         Select-Object -Property Name, ComputerName, DriverName
         Write-Output $printerlist
     }
-   switch ($uAct.Action) {
+    switch ($uAct.Action) {
         local { LocalPrinter }
         network { NetworkPrinter }
         Default { LocalPrinter }
