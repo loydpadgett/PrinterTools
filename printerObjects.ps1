@@ -1,6 +1,6 @@
 class Printer {
     #printer properties
-    [ValidateNotNullOrEmpty()][string]$Server
+    [ValidatePattern('[\w\d].[\w\d]')][string]$Server
     [string]$Printer
     #use method for variable validation and error control 
     Printer(
